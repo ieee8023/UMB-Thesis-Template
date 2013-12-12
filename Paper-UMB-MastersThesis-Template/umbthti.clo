@@ -1,0 +1,380 @@
+% Modifications by Laurentiu Cristofor (04/24/2002)
+    % changed signature page according to the layout changes
+    % made in umbth10.clo
+% Modifications by Laurentiu Cristofor (01/28/2002)
+    % changed title page format
+    % changed copyright page format
+    % changed signature page format
+    % changed order in which the preliminary pages are output
+    % changed abstract page format
+
+% UMB THESIS TITLE PAGE STYLE
+% (C) Copyright 2002 by Laurentiu Cristofor,
+% a modification of the UCLA THESIS TITLE PAGE STYLE
+% (C) Copyright 1995 by John Heidemann,
+% derived from work (C) Copyright 1988 Richard B. Wales,
+% taken in turn from material Copyright (C) 1985 by Leslie Lamport.
+
+%%%
+% Version checking.
+%%%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\newcommand\umbthtiversion{1.0}
+\newcommand\umbthtidate{04/24/2002}
+\ProvidesFile{umbthti}[\umbthtidate, \umbthtiversion]
+
+%
+% When this file is included from other than umbthes,
+% \@spacing may be undefined.
+%
+% NEEDSWORK:  This test always fails, even when umbthes.cls is loaded.
+\def\@stdsinglespacing{1.0}
+\ifx\@singlespacing\@stdsinglespacing
+  % Spacing has already been set (in umbthes.cls).
+\else
+  % Spacing was not set, set it here as if we were umbthes.cls.
+  % \typeout{Spacing not set.}
+  \def\@singlespacing{1.0}
+  \def\@doublespacing{1.544}	  % see above for explanation of value
+  \let\@spacing=\@singlespacing
+\fi
+
+%
+% The following macro pair save and restore ``twocolumn'' status.
+%
+\newif\if@ColumnSaveValue
+\newcommand{\ColumnSave}{
+  \if@twocolumn
+    \@ColumnSaveValuetrue
+  \else
+    \@ColumnSaveValuefalse
+  \fi
+  \pagebreak
+  \onecolumn
+}
+\newcommand{\ColumnSaveHeading}[1]{
+  \if@twocolumn
+    \@ColumnSaveValuetrue
+    \pagebreak
+    \twocolumn[#1]
+  \else
+    \@ColumnSaveValuefalse
+    \pagebreak
+    #1
+  \fi
+}
+\newcommand{\ColumnRestore}{\if@ColumnSaveValue\twocolumn\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			      TITLE PAGE			       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\@maketitlepage{
+   \begin {titlepage}
+      \ColumnSave
+         \renewcommand\baselinestretch{\@singlespacing}\@normalsize%
+      \begin {center}
+         \MakeUppercase\@title \\ 
+         \vfill
+         A \@Thesisname{} Presented \\ \bigskip
+         by \\ \bigskip
+	 \MakeUppercase\@author \\
+         \vskip 6.6\baselineskip
+         Submitted to the Office of Graduate Studies,\\
+         University of Massachusetts Boston, \\
+         in partial fulfillment of the requirements for the degree of \\
+         \vskip 3.8\baselineskip
+         \@degreename \par\vskip 3.8\baselineskip%
+         \@degreemonth{} \@degreeyear \par \vskip 3.8\baselineskip%
+         \@department{} Program\par
+         \vskip 1in
+      \end {center}%
+         \renewcommand\baselinestretch{\@doublespacing}\@normalsize
+      \ColumnRestore
+   \end {titlepage}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			    COPYRIGHT PAGE			       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\if@copyright
+\@copyrighttrue
+\newcommand\nocopyright{\@copyrightfalse}
+
+\def\@copyrightinfo{All rights reserved}
+\newcommand\copyrightinfo[1]{\def\@copyrightinfo{#1}}
+
+\newcommand\@makecopyrightpage{
+   \ColumnSave
+   \thispagestyle{empty}
+   \null
+   \vskip 4.8in
+   \if@copyright
+      \begin{center}\normalspacing %
+	 \copyright{} \@copyrightyear{} by \@author \\
+         \@copyrightinfo
+         \normalspacing
+      \end{center}
+   \fi
+   \ColumnRestore
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			    SIGNATURE PAGE			       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The following definitions for "\chair" and "\member" allow for one or
+% three chairs (co-chairs) and up to six additional committee members.
+
+% Note (Laurentiu Cristofor): UMB doesn't seem to need more than one
+% chair but it requires the signature of the Program Director, so
+% \director has been added
+
+\newcounter{chairs}
+\setcounter{chairs}{0}
+\newcommand\chair[2]{
+   \ifcase\value{chairs}
+      \def\@chairA{#1} \def\@chairtitleA{#2}
+      \or \def\@chairB{#1} \def\@chairtitleB{#2}
+      \or \def\@chairC{#1} \def\@chairtitleC{#2}
+   \else
+      \typeout{Too many co-chairs.}
+   \fi
+   \addtocounter{chairs}{1}
+}
+
+\newcounter{members}
+\setcounter{members}{0}
+\newcommand\member[2]{
+   \ifcase\value{members}
+      \def\@memberA{#1} \def\@membertitleA{#2}
+      \or \def\@memberB{#1} \def\@membertitleB{#2}
+      \or \def\@memberC{#1} \def\@membertitleC{#2}
+      \or \def\@memberD{#1} \def\@membertitleD{#2}
+      \or \def\@memberE{#1} \def\@membertitleE{#2}
+      \or \def\@memberF{#1} \def\@membertitleF{#2}
+   \else
+      \typeout{Too many committee members.}
+   \fi
+   \addtocounter{members}{1}
+}
+
+\newcommand\director[1]{
+   \def\@director{#1}
+}
+
+\newcommand\deptchair[1]{
+   \def\@deptchair{#1}
+}
+
+% width of a signature
+\newlength{\signaturewidth}
+\setlength{\signaturewidth}{4in}
+
+% space between signatures
+\newcommand{\@signaturevskip}{\vskip 24pt plus0pt minus15pt}
+
+% horizontal rule, upon which signatures are placed
+\newcommand{\@signaturerule}{\rule{\signaturewidth}{0.01in}\par}
+
+% makes a left signature line.  Arguments are name and title
+\newcommand\@signatureline[3]{
+   \begin{minipage}[t]{\signaturewidth}%
+   \@signaturerule
+    {#1}, {#2} \\
+    {#3}\par
+   \end{minipage}\par
+   \@signaturevskip
+}
+
+
+% rightsignature places a signature block (almost) flush right
+% to the page
+\newcommand{\@rightsignature}[2]{
+\hfill\begin{minipage}[t]{\signaturewidth}
+       \@signaturerule
+       {#1} \\ 
+       {#2} \par
+\end{minipage}\par%
+}
+
+
+% creates a signature block for the program director
+\newcommand\@signaturedirector[1]{
+  \@rightsignature{#1, Program Director}
+                  {\@department{} Program}
+  \@signaturevskip
+}
+
+% creates a signature block for the program chair
+\newcommand\@signaturedeptchair[1]{
+   \@rightsignature{#1, Chairperson}
+                   {\@department{} Department}
+}
+
+\newcommand\@makesignaturepage{
+   \ColumnSave
+   \thispagestyle{empty}
+   \doublespacing
+   \begin{center}
+      \MakeUppercase\@title \\
+      \vfill
+      A \@Thesisname\ Presented \\
+      by \\
+      \MakeUppercase\@author \\
+      \vskip 48pt plus0pt minus6pt
+   \end{center}
+   \renewcommand\baselinestretch{\@singlespacing}\@normalsize
+   \begin {flushleft}
+      Approved as to style and content by:
+      \vskip 24pt plus0pt minus24pt
+      \ifnum\c@chairs>2
+         \@signatureline{\@chairA}{\@chairtitleA}{Committee Co-chair}
+         \@signatureline{\@chairB}{\@chairtitleB}{Committee Co-chair}
+         \@signatureline{\@chairC}{\@chairtitleC}{Committee Co-chair}
+      \else\ifnum\c@chairs>1
+         \@signatureline{\@chairA}{\@chairtitleA}{Committee Co-chair}
+         \@signatureline{\@chairB}{\@chairtitleB}{Committee Co-chair}
+      \else\ifnum\c@chairs>0
+         \@signatureline{\@chairA}{\@chairtitleA}{Chairperson of Committee}
+      \else\typeout{No committee chair.}
+      \fi\fi\fi
+      \ifnum\c@members>0 \@signatureline{\@memberA}{\@membertitleA}{Member}
+         \else\typeout{No non-chair committee members.}\fi
+      \ifnum\c@members>1 \@signatureline{\@memberB}{\@membertitleB}{Member}\fi
+      \ifnum\c@members>2 \@signatureline{\@memberC}{\@membertitleC}{Member}\fi
+      \ifnum\c@members>3 \@signatureline{\@memberD}{\@membertitleD}{Member}\fi
+      \ifnum\c@members>4 \@signatureline{\@memberE}{\@membertitleE}{Member}\fi
+      \ifnum\c@members>5 \@signatureline{\@memberF}{\@membertitleF}{Member}\fi
+   \end {flushleft}
+   \begingroup
+   \hsize=0.95\hsize
+   \@signaturedirector{\@director}
+   \@signaturedeptchair{\@deptchair}
+   \endgroup
+   \vfill
+   \ColumnRestore
+   \renewcommand\baselinestretch{\@spacing}\@normalsize
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			    ABSTRACT PAGE			       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\if@abstract
+\def\@abstract{}
+\newcommand*{\abstract}[1]{\@abstracttrue\def\@abstract{#1}}
+
+%
+% one argument: the baselinestretch
+% The RFTADP requires doublespacing, but in techreports
+% you may wish something less.
+%
+\newcommand{\abstractname}{ABSTRACT}
+\newcommand{\@makeabstractpage}{
+   \if@abstract
+      \ColumnSave
+      \pagenumbering{roman}
+      \setcounter{page}{4}
+      \par\pagestyle{plain}
+      \begin{center}
+         \doublespacing
+         \normalsize
+         \abstractname\label{ref:\abstractname} \\
+         \vskip 32pt plus0pt minus6pt
+         \MakeUppercase{\@title} \par
+         \vskip 32pt plus0pt minus6pt
+         \@degreemonth\ \@degreeyear \\
+         \bigskip\bigskip
+         \singlespacing
+         \@author,\ \@authortitles \\
+         \doublespacing
+         \bigskip\bigskip
+         Directed by \@chairtitleA\ \@chairA \\
+      \end{center}
+      \bigskip
+      {\doublespacing\par\@abstract\par}
+      \ColumnRestore
+  \else
+      \typeout{No abstract.}
+   \fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			 ACKNOWLEDGMENTS PAGE			       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\if@acks
+\newcommand*\@acknowledgments{}
+\newcommand*\acknowledgments[1]{\@ackstrue\renewcommand\@acknowledgments{#1}}
+\newcommand{\acknowledgmentsname}{ACKNOWLEDGEMENTS}
+\newcommand\@makeacknowledgmentsheading{%
+ \chapter*{\acknowledgmentsname}%
+ \label{ref:\acknowledgmentsname}
+}
+
+
+\newcommand\@makeacknowledgments{
+   \if@acks
+      \clearpage
+      \@makeacknowledgmentsheading
+      \par\pagestyle{plain}
+      \noindent \normalsize \normalfont \@acknowledgments
+      \vfill
+   \fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% List of abbreviations page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makelistofabbreviations}{%
+   \if@listofabbreviations
+      \clearpage
+      \chapter*{\listofabbreviationsname}%
+      \label{ref:\listofabbreviationsname}
+      \input{\listofabbreviations@file}
+   \fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%		      PRINT ALL PRELIMINARY PAGES		       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\makeintropages{
+  \@maketitlepage
+  \pagenumbering{roman}
+  % If we're printing two sided,
+  % insert a blank page for the back of the title page.
+  % NOTE:  This extra page makes the output non-conforming
+  % to the RFTADP, unless you throw it away.
+  \if@twoside
+    \typeout{Two-side detected.}    
+    \pagebreak   % the back side of the title page
+  \fi
+  \@makecopyrightpage
+  \@makesignaturepage
+  \@makeabstractpage
+  \@makeacknowledgments
+  \tableofcontents
+  \listoftables
+  \listoffigures
+  \@makelistofabbreviations
+  \newpage \pagenumbering{arabic}
+}
