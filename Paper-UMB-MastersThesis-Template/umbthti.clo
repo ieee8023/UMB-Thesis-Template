@@ -18,9 +18,9 @@
 %%%
 % Version checking.
 %%%
-\NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\newcommand\umbthtiversion{1.0}
-\newcommand\umbthtidate{04/24/2002}
+\NeedsTeXFormat{LaTeX2e}
+\def\umbthtiversion{1.0}
+\def\umbthtidate{04/24/2002}
 \ProvidesFile{umbthti}[\umbthtidate, \umbthtiversion]
 
 %
@@ -74,24 +74,22 @@
 \newcommand\@maketitlepage{
    \begin {titlepage}
       \ColumnSave
-         \renewcommand\baselinestretch{\@singlespacing}\@normalsize%
       \begin {center}
-         \MakeUppercase\@title \\ 
+         \MakeUppercase{\@title} \\
          \vfill
-         A \@Thesisname{} Presented \\ \bigskip
-         by \\ \bigskip
-	 \MakeUppercase\@author \\
-         \vskip 6.6\baselineskip
-         Submitted to the Office of Graduate Studies,\\
-         University of Massachusetts Boston, \\
-         in partial fulfillment of the requirements for the degree of \\
-         \vskip 3.8\baselineskip
-         \@degreename \par\vskip 3.8\baselineskip%
-         \@degreemonth{} \@degreeyear \par \vskip 3.8\baselineskip%
-         \@department{} Program\par
-         \vskip 1in
-      \end {center}%
+         A \@Thesisname\ Presented \\
+         by \\
+	 \@author \\
+         \vfill
+         \renewcommand\baselinestretch{\@singlespacing}\@normalsize
+         Submitted to the Office of Graduate Studies, University of Massachusetts \\
+         Boston, in partial fulfillment of the requirements for the degree of \\
+         \vskip 32pt plus0pt minus6pt
          \renewcommand\baselinestretch{\@doublespacing}\@normalsize
+         \@degreename \\
+         \@degreemonth\ \@degreeyear \\
+         \@department\ Program\\
+      \end {center}
       \ColumnRestore
    \end {titlepage}
 }
@@ -113,12 +111,11 @@
    \ColumnSave
    \thispagestyle{empty}
    \null
-   \vskip 4.8in
+   \vfill
    \if@copyright
-      \begin{center}\normalspacing %
-	 \copyright{} \@copyrightyear{} by \@author \\
+      \begin{center}
+	 \copyright\ \@copyrightyear\ by\ \@author \\
          \@copyrightinfo
-         \normalspacing
       \end{center}
    \fi
    \ColumnRestore
@@ -174,61 +171,50 @@
    \def\@deptchair{#1}
 }
 
-% width of a signature
-\newlength{\signaturewidth}
-\setlength{\signaturewidth}{4in}
+% The following definition for "\@signatureline" draws a line and puts
+% a name underneath the line.
 
-% space between signatures
-\newcommand{\@signaturevskip}{\vskip 24pt plus0pt minus15pt}
-
-% horizontal rule, upon which signatures are placed
-\newcommand{\@signaturerule}{\rule{\signaturewidth}{0.01in}\par}
-
-% makes a left signature line.  Arguments are name and title
-\newcommand\@signatureline[3]{
-   \begin{minipage}[t]{\signaturewidth}%
-   \@signaturerule
-    {#1}, {#2} \\
-    {#3}\par
-   \end{minipage}\par
-   \@signaturevskip
+\newcommand\@signatureline[2]{
+   \rule{4in}{0.01in} \\
+   #1,\ #2 \\
+   \vskip 24pt plus0pt minus15pt
 }
 
+% The following definitions for "\@signaturedirector" and
+% "\@signaturedeptchair" draw a line and put
+% a name underneath the line, but unlike "\@signatureline" place them
+% to the right of the page.
 
-% rightsignature places a signature block (almost) flush right
-% to the page
-\newcommand{\@rightsignature}[2]{
-\hfill\begin{minipage}[t]{\signaturewidth}
-       \@signaturerule
-       {#1} \\ 
-       {#2} \par
-\end{minipage}\par%
-}
-
-
-% creates a signature block for the program director
 \newcommand\@signaturedirector[1]{
-  \@rightsignature{#1, Program Director}
-                  {\@department{} Program}
-  \@signaturevskip
+   \begin {flushright}
+       \rule{4in}{0.01in} \vskip-15pt
+   \end {flushright}
+   \begin {flushleft}
+       \hspace{1.735in} {#1},\ Program Director \\
+       \hspace{1.735in} \@department\ Program \\
+   \end {flushleft}
 }
 
-% creates a signature block for the program chair
 \newcommand\@signaturedeptchair[1]{
-   \@rightsignature{#1, Chairperson}
-                   {\@department{} Department}
+   \begin {flushright}
+       \rule{4in}{0.01in} \vskip-15pt
+   \end {flushright}
+   \begin {flushleft}
+       \hspace{1.735in} {#1},\ Chairperson \\
+       \hspace{1.735in} \@department\ Department \\
+   \end {flushleft}
 }
 
 \newcommand\@makesignaturepage{
    \ColumnSave
    \thispagestyle{empty}
-   \doublespacing
+   \renewcommand\baselinestretch{\@doublespacing}\@normalsize
    \begin{center}
-      \MakeUppercase\@title \\
-      \vfill
+      \MakeUppercase{\@title} \\
+      \vskip 48pt plus0pt minus6pt
       A \@Thesisname\ Presented \\
       by \\
-      \MakeUppercase\@author \\
+      \@author \\
       \vskip 48pt plus0pt minus6pt
    \end{center}
    \renewcommand\baselinestretch{\@singlespacing}\@normalsize
@@ -236,30 +222,27 @@
       Approved as to style and content by:
       \vskip 24pt plus0pt minus24pt
       \ifnum\c@chairs>2
-         \@signatureline{\@chairA}{\@chairtitleA}{Committee Co-chair}
-         \@signatureline{\@chairB}{\@chairtitleB}{Committee Co-chair}
-         \@signatureline{\@chairC}{\@chairtitleC}{Committee Co-chair}
+         \@signatureline{\@chairA}{\@chairtitleA\\Committee Co-chair}
+         \@signatureline{\@chairB}{\@chairtitleB\\Committee Co-chair}
+         \@signatureline{\@chairC}{\@chairtitleC\\Committee Co-chair}
       \else\ifnum\c@chairs>1
-         \@signatureline{\@chairA}{\@chairtitleA}{Committee Co-chair}
-         \@signatureline{\@chairB}{\@chairtitleB}{Committee Co-chair}
+         \@signatureline{\@chairA}{\@chairtitleA\\Committee Co-chair}
+         \@signatureline{\@chairB}{\@chairtitleB\\Committee Co-chair}
       \else\ifnum\c@chairs>0
-         \@signatureline{\@chairA}{\@chairtitleA}{Chairperson of Committee}
+         \@signatureline{\@chairA}{\@chairtitleA\\Chairperson of Committee}
       \else\typeout{No committee chair.}
       \fi\fi\fi
-      \ifnum\c@members>0 \@signatureline{\@memberA}{\@membertitleA}{Member}
+      \ifnum\c@members>0 \@signatureline{\@memberA}{\@membertitleA\\Member}
          \else\typeout{No non-chair committee members.}\fi
-      \ifnum\c@members>1 \@signatureline{\@memberB}{\@membertitleB}{Member}\fi
-      \ifnum\c@members>2 \@signatureline{\@memberC}{\@membertitleC}{Member}\fi
-      \ifnum\c@members>3 \@signatureline{\@memberD}{\@membertitleD}{Member}\fi
-      \ifnum\c@members>4 \@signatureline{\@memberE}{\@membertitleE}{Member}\fi
-      \ifnum\c@members>5 \@signatureline{\@memberF}{\@membertitleF}{Member}\fi
+      \ifnum\c@members>1 \@signatureline{\@memberB}{\@membertitleB\\Member}\fi
+      \ifnum\c@members>2 \@signatureline{\@memberC}{\@membertitleC\\Member}\fi
+      \ifnum\c@members>3 \@signatureline{\@memberD}{\@membertitleD\\Member}\fi
+      \ifnum\c@members>4 \@signatureline{\@memberE}{\@membertitleE\\Member}\fi
+      \ifnum\c@members>5 \@signatureline{\@memberF}{\@membertitleF\\Member}\fi
    \end {flushleft}
-   \begingroup
-   \hsize=0.95\hsize
+   \vfill
    \@signaturedirector{\@director}
    \@signaturedeptchair{\@deptchair}
-   \endgroup
-   \vfill
    \ColumnRestore
    \renewcommand\baselinestretch{\@spacing}\@normalsize
 }
@@ -272,43 +255,85 @@
 
 \newif\if@abstract
 \def\@abstract{}
-\newcommand*{\abstract}[1]{\@abstracttrue\def\@abstract{#1}}
+\newcommand\abstract[1]{\@abstracttrue\def\@abstract{#1}}
 
 %
 % one argument: the baselinestretch
 % The RFTADP requires doublespacing, but in techreports
 % you may wish something less.
 %
-\newcommand{\abstractname}{ABSTRACT}
-\newcommand{\@makeabstractpage}{
+\newcommand{\@makeabstractpage}[1]{
    \if@abstract
       \ColumnSave
       \pagenumbering{roman}
       \setcounter{page}{4}
       \par\pagestyle{plain}
       \begin{center}
-         \doublespacing
+         \renewcommand\baselinestretch{\@doublespacing}\@normalsize
          \normalsize
-         \abstractname\label{ref:\abstractname} \\
+         ABSTRACT \\
          \vskip 32pt plus0pt minus6pt
-         \MakeUppercase{\@title} \par
+         \MakeUppercase{\@title} \\
          \vskip 32pt plus0pt minus6pt
          \@degreemonth\ \@degreeyear \\
-         \bigskip\bigskip
-         \singlespacing
+         \vskip 14pt plus0pt minus6pt
+         \renewcommand\baselinestretch{\@singlespacing}\@normalsize
          \@author,\ \@authortitles \\
-         \doublespacing
-         \bigskip\bigskip
+         \renewcommand\baselinestretch{\@doublespacing}\@normalsize
+         \vskip 14pt plus0pt minus6pt
          Directed by \@chairtitleA\ \@chairA \\
       \end{center}
-      \bigskip
-      {\doublespacing\par\@abstract\par}
+      \ifx\@spacing\@doublespacing\vskip 12pt\else\vskip 24pt\fi
+      \renewcommand\baselinestretch{#1}\@normalsize
+      %
+      % Set up spacing.
+      % If it's single spacing, indent the margins.
+      % If double spacing is required than things are already
+      % ugly enough (and we loose enough space) that we may
+      % as well use the whole \textwidth.
+      %
+      \ifthenelse{\equal{#1}{\@stdsinglespacing}}{
+	\begin{center}
+	\begin{minipage}{4.75in}
+	\setlength{\parindent}{1.5em}
+	\@abstract
+        \end{minipage}
+	\end{center}
+      }{
+	\@abstract
+      }
+
+      \renewcommand\baselinestretch{\@spacing}\@normalsize
       \ColumnRestore
   \else
       \typeout{No abstract.}
    \fi
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			   DEDICATION PAGE			       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\if@dedication
+\def\@dedication{}
+\newcommand\dedication[1]{\@dedicationtrue\def\@dedication{#1}}
+
+\newcommand\@makededication{
+   \if@dedication
+      \ColumnSave
+      \par\pagestyle{plain}
+      \renewcommand\baselinestretch{\@spacing}\@normalsize\normalfont
+      \vspace*{0pt}		% force spacing at top of page
+      \vfill
+      \begin{center}
+	 \@dedication
+      \end{center}
+      \vfill
+      \ColumnRestore
+   \fi
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %								       %
@@ -317,39 +342,216 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\if@acks
-\newcommand*\@acknowledgments{}
-\newcommand*\acknowledgments[1]{\@ackstrue\renewcommand\@acknowledgments{#1}}
-\newcommand{\acknowledgmentsname}{ACKNOWLEDGEMENTS}
-\newcommand\@makeacknowledgmentsheading{%
- \chapter*{\acknowledgmentsname}%
- \label{ref:\acknowledgmentsname}
+\def\@acknowledgments{}
+\newcommand\acknowledgments[1]{\@ackstrue\def\@acknowledgments{#1}}
+
+\newcommand\@makeacknowledgmentsheading{
+  {
+    \centering
+    \textsc{\large Acknowledgments}
+    \vskip 12pt
+  }
 }
 
 
 \newcommand\@makeacknowledgments{
    \if@acks
-      \clearpage
-      \@makeacknowledgmentsheading
+      \ColumnSaveHeading{\@makeacknowledgmentsheading}
       \par\pagestyle{plain}
+      \renewcommand\baselinestretch{\@spacing}\@normalsize
       \noindent \normalsize \normalfont \@acknowledgments
       \vfill
+      \ColumnRestore
    \fi
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								       %
+%			      VITA PAGE				       %
+%								       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% List of abbreviations page
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This definition for the "\vitaitem" command allows for up to 26 vita
+% items.  The use of "\normalfont" in each definition permits any macros that
+% are sensitive to type style (and which might be disrupted by the mode
+% set for the "tabular" processing) to work properly.
 
-\newcommand{\@makelistofabbreviations}{%
-   \if@listofabbreviations
-      \clearpage
-      \chapter*{\listofabbreviationsname}%
-      \label{ref:\listofabbreviationsname}
-      \input{\listofabbreviations@file}
+\newcounter{vitaitems}
+\setcounter{vitaitems}{0}
+\newcommand\@vitadate[1]{{\parbox[t]{1.25in}{\normalfont{#1}}}}
+\newcommand\@vitatext[1]{{\parbox[t]{4.45in}{\normalfont{#1}}}}
+\newcommand\vitaitem[2]{
+   \ifcase\value{vitaitems}
+      \def\@vitaA{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaB{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaC{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaD{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaE{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaF{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaG{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaH{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaI{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaJ{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaK{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaL{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaM{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaN{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaO{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaP{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaQ{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaR{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaS{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaT{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaU{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaV{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaW{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaX{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaY{\@vitadate{#1} & \@vitatext{#2}} \or
+      \def\@vitaZ{\@vitadate{#1} & \@vitatext{#2}}
+   \else
+      \typeout{Too many vita items.}
    \fi
+   \addtocounter{vitaitems}{1}
 }
 
+% These definitions for the "\publication" and "\presentation" commands
+% allow for up to 26 publications and/or presentations.  Note that UCLA
+% requires publications and presentations to be combined into a single
+% list with a single title; the "@pubs" and "@pres" flags are used to
+% determine what the title will look like.
+
+\newcounter{publications}
+\setcounter{publications}{0}
+\newif\if@pubs \newif\if@pres
+\newcommand\publication[1]{
+   \@pubstrue
+   \ifcase\value{publications}
+      \def\@pubA{#1} \or \def\@pubB{#1} \or \def\@pubC{#1} \or
+      \def\@pubD{#1} \or \def\@pubE{#1} \or \def\@pubF{#1} \or
+      \def\@pubG{#1} \or \def\@pubH{#1} \or \def\@pubI{#1} \or
+      \def\@pubJ{#1} \or \def\@pubK{#1} \or \def\@pubL{#1} \or
+      \def\@pubM{#1} \or \def\@pubN{#1} \or \def\@pubO{#1} \or
+      \def\@pubP{#1} \or \def\@pubQ{#1} \or \def\@pubR{#1} \or
+      \def\@pubS{#1} \or \def\@pubT{#1} \or \def\@pubU{#1} \or
+      \def\@pubV{#1} \or \def\@pubW{#1} \or \def\@pubX{#1} \or
+      \def\@pubY{#1} \or \def\@pubZ{#1}
+   \else
+      \typeout{Too many publications/presentations.}
+   \fi
+   \addtocounter{publications}{1}
+}
+\newcommand\presentation[1]{
+   \@prestrue
+   \ifcase\value{publications}
+      \def\@pubA{#1} \or \def\@pubB{#1} \or \def\@pubC{#1} \or
+      \def\@pubD{#1} \or \def\@pubE{#1} \or \def\@pubF{#1} \or
+      \def\@pubG{#1} \or \def\@pubH{#1} \or \def\@pubI{#1} \or
+      \def\@pubJ{#1} \or \def\@pubK{#1} \or \def\@pubL{#1} \or
+      \def\@pubM{#1} \or \def\@pubN{#1} \or \def\@pubO{#1} \or
+      \def\@pubP{#1} \or \def\@pubQ{#1} \or \def\@pubR{#1} \or
+      \def\@pubS{#1} \or \def\@pubT{#1} \or \def\@pubU{#1} \or
+      \def\@pubV{#1} \or \def\@pubW{#1} \or \def\@pubX{#1} \or
+      \def\@pubY{#1} \or \def\@pubZ{#1}
+   \else
+      \typeout{Too many publications/presentations.}
+   \fi
+   \addtocounter{publications}{1}
+}
+
+\newcommand\@printvitaitem[1]{
+   \noindent
+   \begin {tabular} {@{}p{1.25in}@{}p{4.45in}@{}}
+      #1
+   \end {tabular}
+}
+
+\newcommand\@printpubitem[1]{\par \noindent #1}
+
+\newcommand\@makevitapage{
+   % Save the old stretch.
+   \let\OldArrayStretch=\arraystretch
+   \renewcommand\arraystretch{1.67}
+   \ifnum\c@vitaitems>0
+      \ColumnSave
+      \par\pagestyle{plain}
+      \renewcommand\baselinestretch{\@spacing}\@normalsize
+      \begin{center}
+         \textsc{\large Vita} \\
+      \end{center}
+      \vskip 12pt
+      \ifnum\c@vitaitems>0  \@printvitaitem{\@vitaA} \fi
+      \ifnum\c@vitaitems>1  \@printvitaitem{\@vitaB} \fi
+      \ifnum\c@vitaitems>2  \@printvitaitem{\@vitaC} \fi
+      \ifnum\c@vitaitems>3  \@printvitaitem{\@vitaD} \fi
+      \ifnum\c@vitaitems>4  \@printvitaitem{\@vitaE} \fi
+      \ifnum\c@vitaitems>5  \@printvitaitem{\@vitaF} \fi
+      \ifnum\c@vitaitems>6  \@printvitaitem{\@vitaG} \fi
+      \ifnum\c@vitaitems>7  \@printvitaitem{\@vitaH} \fi
+      \ifnum\c@vitaitems>8  \@printvitaitem{\@vitaI} \fi
+      \ifnum\c@vitaitems>9  \@printvitaitem{\@vitaJ} \fi
+      \ifnum\c@vitaitems>10 \@printvitaitem{\@vitaK} \fi
+      \ifnum\c@vitaitems>11 \@printvitaitem{\@vitaL} \fi
+      \ifnum\c@vitaitems>12 \@printvitaitem{\@vitaM} \fi
+      \ifnum\c@vitaitems>13 \@printvitaitem{\@vitaN} \fi
+      \ifnum\c@vitaitems>14 \@printvitaitem{\@vitaO} \fi
+      \ifnum\c@vitaitems>15 \@printvitaitem{\@vitaP} \fi
+      \ifnum\c@vitaitems>16 \@printvitaitem{\@vitaQ} \fi
+      \ifnum\c@vitaitems>17 \@printvitaitem{\@vitaR} \fi
+      \ifnum\c@vitaitems>18 \@printvitaitem{\@vitaS} \fi
+      \ifnum\c@vitaitems>19 \@printvitaitem{\@vitaT} \fi
+      \ifnum\c@vitaitems>20 \@printvitaitem{\@vitaU} \fi
+      \ifnum\c@vitaitems>21 \@printvitaitem{\@vitaV} \fi
+      \ifnum\c@vitaitems>22 \@printvitaitem{\@vitaW} \fi
+      \ifnum\c@vitaitems>23 \@printvitaitem{\@vitaX} \fi
+      \ifnum\c@vitaitems>24 \@printvitaitem{\@vitaY} \fi
+      \ifnum\c@vitaitems>25 \@printvitaitem{\@vitaZ} \fi
+      \ifnum\c@publications>0{
+         \ifx\@spacing\@doublespacing\parskip 24pt plus 4pt
+	 \else                       \parskip 12pt plus 2pt
+	 \fi
+	 \vskip 36pt
+	 \begin{center}
+	    \large \scshape
+	    \if@pubs
+	       \if@pres Publications and Presentations
+	       \else    Publications
+	       \fi
+	    \else       Presentations
+	    \fi
+	    \\
+	 \end{center}
+	 \nobreak \vskip 12pt
+         \ifnum\c@publications>0  \@printpubitem{\@pubA} \fi
+         \ifnum\c@publications>1  \@printpubitem{\@pubB} \fi
+         \ifnum\c@publications>2  \@printpubitem{\@pubC} \fi
+         \ifnum\c@publications>3  \@printpubitem{\@pubD} \fi
+         \ifnum\c@publications>4  \@printpubitem{\@pubE} \fi
+         \ifnum\c@publications>5  \@printpubitem{\@pubF} \fi
+         \ifnum\c@publications>6  \@printpubitem{\@pubG} \fi
+         \ifnum\c@publications>7  \@printpubitem{\@pubH} \fi
+         \ifnum\c@publications>8  \@printpubitem{\@pubI} \fi
+         \ifnum\c@publications>9  \@printpubitem{\@pubJ} \fi
+         \ifnum\c@publications>10 \@printpubitem{\@pubK} \fi
+         \ifnum\c@publications>11 \@printpubitem{\@pubL} \fi
+         \ifnum\c@publications>12 \@printpubitem{\@pubM} \fi
+         \ifnum\c@publications>13 \@printpubitem{\@pubN} \fi
+         \ifnum\c@publications>14 \@printpubitem{\@pubO} \fi
+         \ifnum\c@publications>15 \@printpubitem{\@pubP} \fi
+         \ifnum\c@publications>16 \@printpubitem{\@pubQ} \fi
+         \ifnum\c@publications>17 \@printpubitem{\@pubR} \fi
+         \ifnum\c@publications>18 \@printpubitem{\@pubS} \fi
+         \ifnum\c@publications>19 \@printpubitem{\@pubT} \fi
+         \ifnum\c@publications>20 \@printpubitem{\@pubU} \fi
+         \ifnum\c@publications>21 \@printpubitem{\@pubV} \fi
+         \ifnum\c@publications>22 \@printpubitem{\@pubW} \fi
+         \ifnum\c@publications>23 \@printpubitem{\@pubX} \fi
+         \ifnum\c@publications>24 \@printpubitem{\@pubY} \fi
+         \ifnum\c@publications>25 \@printpubitem{\@pubZ} \fi
+      }
+      \ColumnRestore
+   \fi\fi
+   \renewcommand\arraystretch{\OldArrayStretch}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %								       %
@@ -359,7 +561,6 @@
 
 \newcommand\makeintropages{
   \@maketitlepage
-  \pagenumbering{roman}
   % If we're printing two sided,
   % insert a blank page for the back of the title page.
   % NOTE:  This extra page makes the output non-conforming
@@ -370,11 +571,12 @@
   \fi
   \@makecopyrightpage
   \@makesignaturepage
-  \@makeabstractpage
+  \@makeabstractpage{\@doublespacing}
+  \@makededication
   \@makeacknowledgments
   \tableofcontents
   \listoftables
   \listoffigures
-  \@makelistofabbreviations
+  \@makevitapage
   \newpage \pagenumbering{arabic}
 }
