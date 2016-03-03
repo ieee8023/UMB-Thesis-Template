@@ -14,6 +14,8 @@ You can compile on the command line using <code>pdflatex umb-thesis.tex </code> 
 
 This template is made possible by:
 
+Henry Z. Lo  - UMass Boston
+
 Joseph Paul Cohen - UMass Boston
 
 Swami Iyer - UMass Boston
