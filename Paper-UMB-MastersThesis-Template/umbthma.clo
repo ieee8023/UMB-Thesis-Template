@@ -70,3 +70,4 @@
    {\def\@degreeyear{#1}\if@cyrset\else\def\@copyrightyear{#1}\fi}
 \newcommand{\degreemonth}[1]{\def\@degreemonth{#1}}
 \newcommand{\copyrightyear}[1]{\def\@copyrightyear{#1}\@cyrsettrue}
+
