@@ -1,3 +1,4 @@
+% Modified by Henry Z Lo 2016
 % Modifications by Laurentiu Cristofor (04/24/2002)
     % changed version
 % Modifications by Laurentiu Cristofor (01/28/2002)
@@ -70,4 +71,3 @@
    {\def\@degreeyear{#1}\if@cyrset\else\def\@copyrightyear{#1}\fi}
 \newcommand{\degreemonth}[1]{\def\@degreemonth{#1}}
 \newcommand{\copyrightyear}[1]{\def\@copyrightyear{#1}\@cyrsettrue}
-
